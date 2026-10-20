@@ -54,8 +54,7 @@ def main(argv=None) -> int:
     """Run a fixit command and return its exit status.
 
     Example:
-        exit_code = main(["convert", "100", "c2f"])
-        assert exit_code == 0
+        main(["convert", "100", "c2f"]) prints 212.0 and returns 0.
     """
     try:
         args = build_parser().parse_args(argv)
