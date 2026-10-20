@@ -4,7 +4,11 @@ import string
 
 
 def generate(length: int = 12, use_digits: bool = True, use_symbols: bool = False) -> str:
-    """Return a random password of the given length."""
+    """Generate a random password of the given length.
+
+    Example:
+        generate(4, use_digits=False) returns a 4-character password.
+    """
     if length <= 0:
         raise ValueError("Password length must be greater then 0!")
     chars = string.ascii_letters
