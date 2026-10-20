@@ -1,5 +1,7 @@
 # 🐛 issue: Python good first issues for your first open source PR
 
+[हिंदी में पढ़ें](README.hi.md)
+
 **Beginner-friendly Python CLI with 30+ good first issues.** Planted bugs, missing tests and small features waiting for you. Fork it, fix it, open a PR and turn your GitHub contribution graph green 🟩
 
 ![Python](https://img.shields.io/badge/python-3.8%2B-blue)
