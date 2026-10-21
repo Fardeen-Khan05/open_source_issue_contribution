@@ -56,6 +56,8 @@ def run_palindrome(args):
 def run_reverse(args):
     print(textutils.reverse_words(args.text))
 
+def run_slugify(args):
+    print(textutils.slugify(args.text))
 COMMAND_TABLE = {
     "wc": run_wc,
     "convert": run_convert,
@@ -64,6 +66,7 @@ COMMAND_TABLE = {
     "json": run_json,
     "palindrome": run_palindrome,
     "reverse": run_reverse,
+    "slugify": run_slugify,
 }
 
 def build_parser() -> argparse.ArgumentParser:
@@ -103,9 +106,11 @@ def build_parser() -> argparse.ArgumentParser:
 
     rw = sub.add_parser("reverse", help="reverse the words in a sentence")
     rw.add_argument("text")
+
+    sg = sub.add_parser("slugify", help="convert text into a URL-friendly slug")
+    sg.add_argument("text")
+
     return parser
-
-
 def main(argv=None) -> int:
     """Run a fixit command and return its exit status.
 
