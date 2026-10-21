@@ -13,6 +13,58 @@ CONVERSIONS = {
     "mi2km": convert.miles_to_km,
 }
 
+def run_wc(args):
+    if args.file is not None:
+        try:
+            text = args.file.read_text(encoding="utf-8")
+        except OSError:
+            raise ValueError(f"Error: cannot read file '{args.file}'")
+    elif args.text is not None:
+        text = args.text
+    else:
+        raise ValueError("Error: provide text or use --file")
+
+    print(
+        f"words={wordcount.count_words(text)} "
+        f"lines={wordcount.count_lines(text)} "
+        f"chars={wordcount.count_chars(text)}"
+    )
+
+def run_convert(args):
+    try:
+        result = CONVERSIONS[args.kind](args.value)
+        print(result)
+    except KeyError:
+        raise ValueError(f"Error: unknown conversion '{args.kind}'")
+
+def run_password(args):
+    print(password.generate(args.length, use_symbols=args.symbols))
+
+def run_uuid(args):
+    for _ in range(args.count):
+        print(uuid.uuid4())
+
+def run_json(args):
+    try:
+        print(jsonfmt.format_json(args.raw))
+    except ValueError as e:
+        raise ValueError(f"Error: invalid JSON - {e}")
+
+def run_palindrome(args):
+    print(textutils.is_palindrome(args.text))
+
+def run_reverse(args):
+    print(textutils.reverse_words(args.text))
+
+COMMAND_TABLE = {
+    "wc": run_wc,
+    "convert": run_convert,
+    "password": run_password,
+    "uuid": run_uuid,
+    "json": run_json,
+    "palindrome": run_palindrome,
+    "reverse": run_reverse,
+}
 
 def build_parser() -> argparse.ArgumentParser:
     """Build the argument parser for the fixit command-line interface.
@@ -26,7 +78,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--version", action="version", version=f"fixit {__version__}")
     sub = parser.add_subparsers(dest="command", required=True)
 
-    
+
     wc = sub.add_parser("wc", help="count words, lines and characters")
     wc.add_argument("text", nargs="?")
     wc.add_argument("--file", type=Path, help="read text from a file")
@@ -62,39 +114,7 @@ def main(argv=None) -> int:
     """
     try:
         args = build_parser().parse_args(argv)
-        
-        if args.command == "wc":
-            if args.file is not None:
-                try:
-                    text = args.file.read_text(encoding="utf-8")
-                except OSError:
-                    print(f"Error: cannot read file '{args.file}'", file=sys.stderr)
-                    return 1
-            elif args.text is not None:
-                text = args.text
-            else:
-                print("Error: provide text or use --file", file=sys.stderr)
-                return 1
-
-            print(
-                f"words={wordcount.count_words(text)} "
-                f"lines={wordcount.count_lines(text)} "
-                f"chars={wordcount.count_chars(text)}"
-            )
-
-        elif args.command == "convert":
-            print(CONVERSIONS[args.kind](args.value))
-        elif args.command == "password":
-            print(password.generate(args.length, use_symbols=args.symbols))
-        elif args.command == "uuid":
-            for _ in range(args.count):
-                print(uuid.uuid4())
-        elif args.command == "json":
-            print(jsonfmt.format_json(args.raw))
-        elif args.command == "palindrome":
-            print(textutils.is_palindrome(args.text))
-        elif args.command == "reverse":
-            print(textutils.reverse_words(args.text))
+        COMMAND_TABLE[args.command](args)
         return 0
     except ValueError as e:
         print(str(e), file=sys.stderr)
