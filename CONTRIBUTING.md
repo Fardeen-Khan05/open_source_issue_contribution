@@ -18,6 +18,26 @@ pytest
 ```
 All tests should pass (known bugs show as `xfail`).
 
+## Pre-commit hooks
+
+Install pre-commit:
+
+```bash
+pip install pre-commit
+```
+
+Install the git hooks:
+
+```bash
+pre-commit install
+```
+
+Run the hooks on all files:
+
+```bash
+pre-commit run --all-files
+```
+
 ## 3. Make your change
 ```bash
 git checkout -b fix-short-description
