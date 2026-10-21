@@ -14,6 +14,13 @@ CONVERSIONS = {
 
 
 def build_parser() -> argparse.ArgumentParser:
+    """Build the argument parser for the fixit command-line interface.
+
+    Example:
+        parser = build_parser()
+        args = parser.parse_args(["wc", "hello world"])
+        assert args.command == "wc"
+    """
     parser = argparse.ArgumentParser(prog="fixit", description="A tiny toolbox to practice open source.")
     parser.add_argument("--version", action="version", version=f"fixit {__version__}")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -44,6 +51,11 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main(argv=None) -> int:
+    """Run a fixit command and return its exit status.
+
+    Example:
+        main(["convert", "100", "c2f"]) prints 212.0 and returns 0.
+    """
     try:
         args = build_parser().parse_args(argv)
         if args.command == "wc":
